@@ -1,0 +1,70 @@
+#!/bin/bash
+
+# todo program
+# Manage a simple todo list in the terminal
+# John Craffey
+# 8-8-2019
+
+# Create the list if not created yet
+if ! test -e "todo.txt"; then
+	echo "### todo list ###
+	" > todo.txt
+fi
+
+# Check argument validity
+arg1=$1
+if [[ $arg1 != "add" && $arg1 != "list" && $arg1 != "complete" \
+		&& $arg1 != "help" ]]; then
+	echo "Valid arguments include:
+	add
+	complete
+	list
+	help"
+fi
+
+# If adding or completing an task, put task name in a variable
+if [[ $arg1 == "add" || $arg1 == "complete" ]]; then
+	task=$2
+fi
+
+# Do something based on what first argument is
+case "${arg1}" in
+	# Add a task
+	"add" )
+		echo "Task: $task
+Status: Incomplete
+" >> todo.txt
+	echo "Task added.
+Task: $task
+Status: Incomplete
+
+run \"todo complete $task\" to complete this task.";;
+
+	# List all tasks
+	"list" )
+		cat todo.txt;;
+
+	# Complete a task
+	"complete" )
+		# Edit the file in place to change status to complete
+		sed -i "/$task/!b;n;cStatus: Complete" todo.txt ;;
+
+	# List options
+	"help" )
+		echo "Welcome to todo!
+	Valid first arguments include:
+	add
+	complete
+	list
+	help
+
+	To add a todo task use the format:
+	\"todo add <task name>\"
+
+	To list all tasks use the format:
+	\"todo list\"
+
+	To complete an task use the format:
+	\"todo complete <task name>\"";;
+esac
+
