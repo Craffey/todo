@@ -5,7 +5,7 @@
 # John Craffey
 # 8-8-2019
 
-# Create the list if not created yet
+# Create the todo list file if not created yet
 if ! test -e "todo.txt"; then
 	echo "### todo list ###
 	" > todo.txt
@@ -14,12 +14,8 @@ fi
 # Check argument validity
 arg1=$1
 if [[ $arg1 != "add" && $arg1 != "list" && $arg1 != "complete" \
-		&& $arg1 != "help" ]]; then
-	echo "Valid arguments include:
-	add
-	complete
-	list
-	help"
+		&& $arg1 != "help" && $arg1 != "remove" ]]; then
+	echo -e "Input error. Try running\n 	'todo help'"
 fi
 
 # If adding or completing an task, put task name in a variable
@@ -31,14 +27,11 @@ fi
 case "${arg1}" in
 	# Add a task
 	"add" )
-		echo "Task: $task
-Status: Incomplete
-" >> todo.txt
-	echo "Task added.
-Task: $task
-Status: Incomplete
-
-run \"todo complete $task\" to complete this task.";;
+		# Append the task to the todo list
+		echo -e "Task: $task\nStatus: Incomplete\n" >> todo.txt
+		# Output response
+		echo -e "Task added.\nTask: $task\nStatus: Incomplete\n\n"
+		echo "run \"todo complete '$task'\" to mark as complete.";;
 
 	# List all tasks
 	"list" )
@@ -47,24 +40,22 @@ run \"todo complete $task\" to complete this task.";;
 	# Complete a task
 	"complete" )
 		# Edit the file in place to change status to complete
-		sed -i "/$task/!b;n;cStatus: Complete" todo.txt ;;
+		sed -i "/$task/!b;n;cStatus: Complete" todo.txt 
+		# Output response
+		echo -e "Task completed.\nTask: $task\nStatus: Complete";;
 
 	# List options
 	"help" )
-		echo "Welcome to todo!
-	Valid first arguments include:
-	add
-	complete
-	list
-	help
-
-	To add a todo task use the format:
-	\"todo add <task name>\"
-
-	To list all tasks use the format:
-	\"todo list\"
-
-	To complete an task use the format:
-	\"todo complete <task name>\"";;
+		echo
+		echo "Welcome to todo!"
+		echo "Valid first arguments include:"
+		echo -e "	add\n	complete\n	remove\n	list\n	help"
+		echo
+		echo "To list all tasks use the format:"
+		echo "\"todo list\""
+		echo
+		echo "To add or edit a task task use the format:"
+		echo "\"todo <command> '<task name>'\""
+		echo ;;
 esac
 
