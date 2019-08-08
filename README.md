@@ -7,4 +7,4 @@ install manually
 
 Using todo: Run the command
 
-	"todo help:
+	"todo help"
