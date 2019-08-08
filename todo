@@ -18,8 +18,8 @@ if [[ $arg1 != "add" && $arg1 != "list" && $arg1 != "complete" \
 	echo -e "Input error. Try running\n 	'todo help'"
 fi
 
-# If adding or completing an task, put task name in a variable
-if [[ $arg1 == "add" || $arg1 == "complete" ]]; then
+# If working with a task, put task name in a variable
+if [[ $arg1 == "add" || $arg1 == "complete" || $arg1 == "remove" ]]; then
 	task=$2
 fi
 
@@ -43,6 +43,13 @@ case "${arg1}" in
 		sed -i "/$task/!b;n;cStatus: Complete" todo.txt 
 		# Output response
 		echo -e "Task completed.\nTask: $task\nStatus: Complete";;
+
+	# Remove a task
+	"remove" )
+		# Remove the lines from todo list
+		sed -i "/$task/,+2 d" todo.txt
+		# Output response
+		echo "$task has been removed.";;
 
 	# List options
 	"help" )
